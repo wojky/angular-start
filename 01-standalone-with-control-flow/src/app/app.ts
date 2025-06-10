@@ -1,16 +1,14 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
+  selector: "app-root",
+  imports: [MatIconModule],
   template: `
-    <h1>Welcome to {{title}}!</h1>
-
-    <router-outlet />
+    <h1 class="text-3xl font-bold text-amber-700">
+      <mat-icon fontIcon="emoji_people"></mat-icon>Hello world!
+    </h1>
   `,
   styles: [],
 })
-export class App {
-  protected title = '01-standalone-with-control-flow';
-}
+export class App {}
