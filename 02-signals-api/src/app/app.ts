@@ -2,6 +2,7 @@ import {
   Component,
   computed,
   effect,
+  inject,
   linkedSignal,
   signal,
 } from "@angular/core";
@@ -9,6 +10,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { FirstComponent } from "./first.component";
 import { NgIf } from "@angular/common";
 import { CharactersList } from "./characters-list/characters-list";
+import { CharactersListService } from "./characters-list/characters-list.service";
 
 @Component({
   selector: "app-root",
@@ -25,6 +27,7 @@ import { CharactersList } from "./characters-list/characters-list";
   ],
 })
 export class App {
+  // service = inject(CharactersListService);
   title = signal(" Hello world!!!!!");
 
   showSecondFirst = signal(false);
