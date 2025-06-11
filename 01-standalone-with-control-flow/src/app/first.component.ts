@@ -1,4 +1,4 @@
-import { Component, input, Input } from "@angular/core";
+import { Component, computed, input, Input } from "@angular/core";
 
 @Component({
   selector: "app-first",
@@ -8,4 +8,8 @@ export class FirstComponent {
   // @Input() text = "Example...";
   text = input("Example...");
   //   a = input.required();
+
+  text2 = computed(() => {
+    return this.text();
+  });
 }
