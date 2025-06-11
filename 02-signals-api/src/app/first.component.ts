@@ -1,8 +1,8 @@
-import { Component, computed, input, Input } from "@angular/core";
+import { Component, computed, input, Input, viewChild } from "@angular/core";
 
 @Component({
   selector: "app-first",
-  template: ` <h1>{{ text() }}</h1> `,
+  template: ` <h1 #heading>{{ text() }}</h1> `,
 })
 export class FirstComponent {
   // @Input() text = "Example...";
@@ -12,4 +12,6 @@ export class FirstComponent {
   text2 = computed(() => {
     return this.text();
   });
+
+  heading = viewChild<HTMLHeadingElement>("heading");
 }

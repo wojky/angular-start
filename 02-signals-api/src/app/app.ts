@@ -1,44 +1,20 @@
-import { Component, computed, signal } from "@angular/core";
+import {
+  Component,
+  computed,
+  effect,
+  linkedSignal,
+  signal,
+} from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 import { FirstComponent } from "./first.component";
 import { NgIf } from "@angular/common";
+import { CharactersList } from "./characters-list/characters-list";
 
 @Component({
   selector: "app-root",
-  imports: [MatIconModule, FirstComponent],
+  imports: [MatIconModule, FirstComponent, CharactersList],
   // templateUrl: "./app.html",
-  template: `
-    <h1 class="text-3xl font-bold">
-      <mat-icon fontIcon="emoji_people"></mat-icon>
-      {{ title() }}
-    </h1>
-    <app-first [text]="firstCmpText()" />
-
-    <button (click)="toggle()">Toggle</button>
-
-    @if (showSecondFirst()) {
-    <app-first />
-    } @else { ... }
-    <!--  -->
-    @for(item of array(); track $index) {
-    <!-- $even, $odd, $last, $first -->
-
-    <p [class.bg-amber-500]="$even">{{ item }}, {{ $index }}, {{ $even }}</p>
-    } @empty {
-    <p>Brak wyników</p>
-    }
-
-    <!--  -->
-
-    @switch(title()) { @case('') { } @default() { } }
-    <!--  -->
-
-    @let variable = array.length * 5;
-
-    {{ variable }}
-
-    <p>{{ titleUpperCased() }}</p>
-  `,
+  template: ` <app-characters-list /> `,
   styles: [
     `
       /* style sa enkapsulowane dla danego komponentu */
@@ -59,9 +35,34 @@ export class App {
     return this.title().toUpperCase();
   });
 
+  e = effect(() => {
+    this.title();
+
+    console.log(123);
+  });
+
+  ls = linkedSignal(() => {
+    return this.title().toUpperCase();
+  });
+
+  ls2 = linkedSignal({
+    source: () => {
+      return {
+        title: this.title(),
+        showSecondFirst: this.showSecondFirst(),
+      };
+    },
+    computation: (source, prev) => {
+      prev?.source;
+      prev?.value;
+    },
+  });
+
   firstCmpText = signal("Different...");
 
   toggle() {
+    const title = this.title(); // tutaj tylko 1 wyciagamy wartosc!
+
     this.title.set("Diff");
     this.array.set([]);
     // this.showSecondFirst.set(!this.showSecondFirst());
