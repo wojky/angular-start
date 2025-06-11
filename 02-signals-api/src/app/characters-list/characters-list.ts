@@ -53,6 +53,8 @@ export class CharactersList {
     ).length;
   });
 
+  statuses = computed(() => {}); // -> {alive, dead, unknown}
+
   isReady = computed(() => {
     return Boolean(this.alive());
   });
