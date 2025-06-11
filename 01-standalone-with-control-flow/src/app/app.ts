@@ -20,7 +20,7 @@ import { FirstComponent } from "./first.component";
   `,
   styles: [
     `
-      // style sa enkapsulowane dla danego komponentu
+      /* style sa enkapsulowane dla danego komponentu */
       h1 {
         color: peru;
       }
