@@ -7,10 +7,24 @@ import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
+  ValidatorFn,
 } from "@angular/forms";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
+
+const customMinLength = (min: number) => {
+  return ((control) => {
+    return control.value.length >= min
+      ? null
+      : {
+          customMinLength: {
+            length: control.value.length,
+            minLength: min,
+          },
+        };
+  }) as ValidatorFn;
+};
 
 @Component({
   selector: "app-characters-list",
@@ -24,12 +38,15 @@ import { MatSelectModule } from "@angular/material/select";
   template: `
     <!-- <button (click)="navigate()">go to locations</button> -->
     <p>Alive count: {{ alive() }}</p>
-    <form [formGroup]="filtersForm" class="pb-4">
-      <input
-        formControlName="name"
-        placeholder="Enter name..."
-        class="border-b border-black"
-      />
+    <form [formGroup]="filtersForm" class="flex gap-4 pb-4">
+      <div>
+        <input
+          formControlName="name"
+          placeholder="Enter name..."
+          class="border-b border-black"
+        />
+        <p>{{ filtersForm.controls.name.invalid }}</p>
+      </div>
 
       <mat-form-field>
         <mat-label>Gender:</mat-label>
@@ -52,7 +69,7 @@ import { MatSelectModule } from "@angular/material/select";
         </mat-select>
       </mat-form-field>
     </form>
-    @if (characters().length) {
+    @if (!loading() && !error()) {
       @for (character of characters(); track character.id) {
         <div class="flex gap-2 items-center">
           <img class="h-16" [src]="character.image" />
@@ -65,8 +82,10 @@ import { MatSelectModule } from "@angular/material/select";
           }
         </div>
       }
-    } @else {
+    } @else if (loading()) {
       <mat-spinner [diameter]="20" />
+    } @else {
+      <p>{{ error()?.code }}</p>
     }
   `,
 })
@@ -74,9 +93,14 @@ export class CharactersList {
   fb = inject(NonNullableFormBuilder);
 
   filtersForm = this.fb.group({
-    name: this.fb.control("", [Validators.minLength(3)]),
+    name: this.fb.control("", [
+      // Validators.minLength(3),
+      // customMinLength(5),
+      // Validators.required,
+    ]),
     gender: this.fb.control<Character["gender"] | "">(""),
     status: this.fb.control<Character["status"] | "">(""),
+    collection: this.fb.array([]),
   });
 
   genderOptions: { value: Character["gender"] | ""; viewValue: string }[] = [
@@ -120,6 +144,8 @@ export class CharactersList {
   service = inject(CharactersListService);
   router = inject(Router);
   characters = this.service.characters;
+  loading = this.service.loading;
+  error = this.service.error;
 
   alive = computed(() => {
     const characters = this.characters();
@@ -153,6 +179,12 @@ export class CharactersList {
           status: value.status,
         });
       });
+
+    this.filtersForm.markAllAsTouched();
+    this.filtersForm.valid;
+
+    this.filtersForm.value;
+    this.filtersForm.getRawValue();
   }
 
   navigate() {

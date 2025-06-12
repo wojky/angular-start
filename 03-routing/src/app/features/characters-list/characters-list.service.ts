@@ -22,6 +22,8 @@ export class CharactersListService {
   private http = inject(HttpClient);
 
   #characters = signal<Character[]>([]);
+  #error = signal<{ code: number } | null>(null);
+  #loading = signal(false);
 
   #params = signal<CharacterListParams>({
     page: 1,
@@ -33,12 +35,18 @@ export class CharactersListService {
   });
 
   e = effect(() => {
+    this.#error.set(null);
+    this.#loading.set(true);
+
     this.getAll(this.#params()).subscribe({
       next: (response) => {
+        console.log({ response });
         this.#characters.set(response.results);
+        this.#loading.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        // todo
+        this.#error.set({ code: err.error.code });
+        this.#loading.set(false);
       },
     });
   });
@@ -53,6 +61,8 @@ export class CharactersListService {
 
   characters = this.#characters.asReadonly();
   params = this.#params.asReadonly();
+  error = this.#error.asReadonly();
+  loading = this.#loading.asReadonly();
 
   updateParams(params: Partial<CharacterListParams>) {
     this.#params.update((p) => {
