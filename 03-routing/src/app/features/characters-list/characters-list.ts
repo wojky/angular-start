@@ -2,12 +2,14 @@ import { Component, computed, inject } from "@angular/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { Character } from "./model/Character";
 import { CharactersListService } from "./characters-list.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-characters-list",
   providers: [CharactersListService],
   imports: [MatProgressSpinnerModule],
   template: `
+    <button (click)="navigate()">go to locations</button>
     <p>Alive count: {{ alive() }}</p>
     @if (characters().length) {
       @for (character of characters(); track character.id) {
@@ -29,6 +31,7 @@ import { CharactersListService } from "./characters-list.service";
 })
 export class CharactersList {
   service = inject(CharactersListService);
+  router = inject(Router);
   characters = this.service.characters;
 
   alive = computed(() => {
@@ -41,6 +44,10 @@ export class CharactersList {
     return characters.filter((character) => character.status === "Alive")
       .length;
   });
+
+  navigate() {
+    this.router.navigate(["/locations"]);
+  }
 
   markAsDead(character: Character) {
     this.service.markAsDead(character);
