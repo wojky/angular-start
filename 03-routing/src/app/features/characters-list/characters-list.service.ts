@@ -9,6 +9,7 @@ import {
 import { Character } from "./model/Character";
 
 type CharacterListParams = {
+  name: string;
   page: number;
   gender: Character["gender"] | "";
   status: Character["status"] | "";
@@ -28,6 +29,7 @@ export class CharactersListService {
     status: "",
     type: "",
     species: "",
+    name: "",
   });
 
   e = effect(() => {
