@@ -1,4 +1,5 @@
-import { Routes } from "@angular/router";
+import { Routes, ResolveFn } from "@angular/router";
+import { delay, of } from "rxjs";
 
 export const routes: Routes = [
   {
@@ -8,6 +9,12 @@ export const routes: Routes = [
   },
   {
     path: "locations",
+    resolve: {
+      // resolve example
+      fromResolve: () => {
+        return of(1001).pipe(delay(10));
+      },
+    },
     loadComponent: () =>
       import("./locations/locations.screen").then((m) => m.LocationsScreen),
   },

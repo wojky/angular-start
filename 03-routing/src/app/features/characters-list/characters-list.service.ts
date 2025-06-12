@@ -10,6 +10,10 @@ import { Character } from "./model/Character";
 
 type CharacterListParams = {
   page: number;
+  gender: Character["gender"] | "";
+  status: Character["status"] | "";
+  type: string;
+  species: string;
 };
 
 @Injectable()
@@ -20,6 +24,10 @@ export class CharactersListService {
 
   #params = signal<CharacterListParams>({
     page: 1,
+    gender: "",
+    status: "",
+    type: "",
+    species: "",
   });
 
   e = effect(() => {
