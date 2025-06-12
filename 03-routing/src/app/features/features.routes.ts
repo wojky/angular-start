@@ -12,6 +12,13 @@ export const routes: Routes = [
       import("./locations/locations.screen").then((m) => m.LocationsScreen),
   },
   {
+    path: "locations/:id",
+    loadComponent: () =>
+      import("./locations/location-details/location-details").then(
+        (m) => m.LocationDetails,
+      ),
+  },
+  {
     path: "**",
     redirectTo: "characters",
   },
