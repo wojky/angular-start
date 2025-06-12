@@ -1,23 +1,20 @@
 import { Routes } from "@angular/router";
+import { Auth } from "./auth/auth";
+import { ShellComponent } from "./features/shell.component";
 
 export const routes: Routes = [
   {
-    path: "characters",
-    loadComponent: () =>
-      import("./characters-list/characters-list").then((m) => m.CharactersList),
-  },
-  {
-    path: "locations",
-    loadComponent: () =>
-      import("./locations/locations.screen").then((m) => m.LocationsScreen),
+    path: "auth",
+    component: Auth,
   },
   {
     path: "",
-    pathMatch: "full",
-    redirectTo: "characters",
+    component: ShellComponent,
+    loadChildren: () =>
+      import("./features/features.routes").then((m) => m.routes),
   },
   {
     path: "**",
-    redirectTo: "characters",
+    redirectTo: "auth",
   },
 ];

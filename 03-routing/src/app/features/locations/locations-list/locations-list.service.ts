@@ -6,7 +6,7 @@ import {
   HttpParams,
 } from "@angular/common/http";
 import { Location } from "../model/Location";
-import { ListApiResponse } from "../../shared/http/ListApiResponse";
+import { ListApiResponse } from "../../../shared/http/ListApiResponse";
 
 type LocationsListParams = {
   page: number;
