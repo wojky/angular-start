@@ -1,15 +1,15 @@
 import { Routes } from "@angular/router";
-import { CharactersList } from "./characters-list/characters-list";
-import { LocationsScreen } from "./locations/locations.screen";
 
 export const routes: Routes = [
   {
     path: "characters",
-    component: CharactersList,
+    loadComponent: () =>
+      import("./characters-list/characters-list").then((m) => m.CharactersList),
   },
   {
     path: "locations",
-    component: LocationsScreen,
+    loadComponent: () =>
+      import("./locations/locations.screen").then((m) => m.LocationsScreen),
   },
   {
     path: "",
