@@ -7,6 +7,7 @@ import {
   HttpParams,
 } from "@angular/common/http";
 import { Character } from "./model/Character";
+import { API_URL } from "../../app.config";
 
 type CharacterListParams = {
   name: string;
@@ -20,6 +21,7 @@ type CharacterListParams = {
 @Injectable()
 export class CharactersListService {
   private http = inject(HttpClient);
+  private API_URL = inject(API_URL);
 
   #characters = signal<Character[]>([]);
   #error = signal<{ code: number } | null>(null);
@@ -53,7 +55,7 @@ export class CharactersListService {
 
   getAll(params: CharacterListParams) {
     return this.http
-      .get<CharacterResponse>("https://rickandmortyapi.com/api/character", {
+      .get<CharacterResponse>(`${this.API_URL}/character`, {
         params: new HttpParams({ fromObject: params }),
       })
       .pipe(delay(1500));

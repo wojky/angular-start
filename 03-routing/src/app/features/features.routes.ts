@@ -1,4 +1,4 @@
-import { Routes, ResolveFn } from "@angular/router";
+import { Routes } from "@angular/router";
 import { delay, of } from "rxjs";
 
 export const routes: Routes = [
@@ -9,6 +9,7 @@ export const routes: Routes = [
   },
   {
     path: "locations",
+    providers: [],
     resolve: {
       // resolve example
       fromResolve: () => {
