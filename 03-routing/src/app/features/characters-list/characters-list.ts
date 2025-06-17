@@ -12,6 +12,7 @@ import {
 import { debounceTime, distinctUntilChanged, tap } from "rxjs";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
+import { API_URL } from "../../app.config";
 
 const customMinLength = (min: number) => {
   return ((control) => {
@@ -28,7 +29,13 @@ const customMinLength = (min: number) => {
 
 @Component({
   selector: "app-characters-list",
-  providers: [CharactersListService],
+  providers: [
+    CharactersListService,
+    {
+      provide: API_URL,
+      useValue: "https://mortyandrickapi.com/api",
+    },
+  ],
   imports: [
     MatProgressSpinnerModule,
     ReactiveFormsModule,
@@ -93,7 +100,7 @@ export class CharactersList {
   fb = inject(NonNullableFormBuilder);
 
   filtersForm = this.fb.group({
-    name: this.fb.control("", [
+    name: this.fb.control({ value: "", disabled: false }, [
       // Validators.minLength(3),
       // customMinLength(5),
       // Validators.required,
@@ -158,7 +165,12 @@ export class CharactersList {
       .length;
   });
 
+  url = inject(API_URL);
+
   ngOnInit() {
+    this.filtersForm.controls.name.enable();
+
+    console.log(this.url);
     this.filtersForm.valueChanges
       .pipe(
         debounceTime(400),

@@ -1,6 +1,7 @@
 import {
   ApplicationConfig,
   inject,
+  InjectionToken,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from "@angular/core";
@@ -13,6 +14,11 @@ import {
   withInterceptors,
 } from "@angular/common/http";
 import { catchError, EMPTY, of } from "rxjs";
+
+export const API_URL = new InjectionToken<string>("api_url", {
+  providedIn: "root",
+  factory: () => "https://rickandmortyapi.com/api",
+});
 
 const interceptor: HttpInterceptorFn = (req, next) => {
   // przed callem do api
